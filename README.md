@@ -10,8 +10,11 @@ Add Google translate for GoldenDict
 GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 
 类型：纯文字
+
 名称：Google Translate
+
 命令行：python H:\PathTo\googletranslate.py zh-CN %GDWORD%
+
 图示：H:\PathTo\google_translate.png
 
 [1]: https://github.com/goldendict/goldendict
