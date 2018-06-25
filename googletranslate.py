@@ -30,7 +30,7 @@ def gtrans():
         resp = session.get(url, proxies=proxies, timeout=3).json()[0]
         for x in resp:
             result = result + x[0]
-        print(result)
+        print(result.result.replace(u'\u200b', u' '))
     except requests.exceptions.ReadTimeout as e:
         print('╰（‵□′）╯: ReadTimeout...')
     except requests.exceptions.ProxyError as e:
