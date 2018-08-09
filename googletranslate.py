@@ -14,11 +14,6 @@ import requests
 import sys
 import urllib.parse
 
-proxies = {
-    "http": "http://127.0.0.1:1080",
-    "https": "http://127.0.0.1:1080"
-}
-
 def gtrans():
     result = ''
     base_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0'}
@@ -27,14 +22,12 @@ def gtrans():
     qry = urllib.parse.quote_plus(sys.argv[2])
     url = 'http://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={}&dt=t&q={}'.format(sys.argv[1], qry)
     try:
-        resp = session.get(url, proxies=proxies, timeout=3).json()[0]
+        resp = session.get(url, timeout=3).json()[0]
         for x in resp:
             result = result + x[0]
         print(result.encode('gbk', 'ignore').decode('gbk'))
     except requests.exceptions.ReadTimeout as e:
         print('╰（‵□′）╯: ReadTimeout...')
-    except requests.exceptions.ProxyError as e:
-        print('(╯‵□′)╯︵┻━┻: ProxyError...')
 
 if __name__ == "__main__":
     gtrans()
