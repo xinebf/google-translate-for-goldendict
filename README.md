@@ -3,7 +3,7 @@ Add Google translate for GoldenDict
 
 [GoldenDict][1] 是一个非常好用的词典工具, 却不能整句或整段的翻译, 时常需要借助 [Google translate][2] 对于将 Google 翻译加到 GoldenDict 是一个很好的方法 φ(゜▽゜*)♪
 
-**使用方法: **
+**使用方法:**
 
 需要 python3 并安装 requests:
 
