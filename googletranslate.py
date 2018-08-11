@@ -20,11 +20,11 @@ def gtrans():
     session = requests.Session()
     session.headers = base_headers
     qry = urllib.parse.quote_plus(sys.argv[2])
-    url = 'http://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={}&dt=t&q={}'.format(sys.argv[1], qry)
+    url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={}&dt=t&q={}'.format(sys.argv[1], qry)
     try:
-        result = sys.argv[2] + '\n'
-        resp = session.get(url, timeout=3).json()[0]
-        for x in resp:
+        resp = session.get(url, timeout=3).json()
+        result = result + '^_^: Translate {} To {}\n{}\n'.format(resp[2], sys.argv[1], sys.argv[2])
+        for x in resp[0]:
             result = result + x[0]
         print(result.encode('gbk', 'ignore').decode('gbk'))
     except requests.exceptions.ReadTimeout as e:
