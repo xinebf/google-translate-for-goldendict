@@ -23,7 +23,15 @@ def gtrans():
     url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={}&dt=t&q={}'.format(sys.argv[1], qry)
     try:
         resp = session.get(url, timeout=3).json()
-        result = result + '^_^: Translate {} To {}\n{}\n'.format(resp[2], sys.argv[1], sys.argv[2])
+        if resp[2] == "zh-CN":
+            result = result + '^_^: Translate {} To {}\n'.format(resp[2], atl)
+            url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={}&dt=t&q={}'.format(atl, qry)
+            respen = session.get(url, timeout=3).json()
+            for x in respen[0]:
+                result = result + x[0]
+            result = result + '\n'
+        else:
+            result = result + '^_^: Translate {} To {}\n{}\n'.format(resp[2], sys.argv[1], sys.argv[2])
         for x in resp[0]:
             result = result + x[0]
         print(result.encode('gbk', 'ignore').decode('gbk'))
@@ -31,4 +39,5 @@ def gtrans():
         print('╰（‵□′）╯: ReadTimeout...')
 
 if __name__ == "__main__":
+    atl = 'en'
     gtrans()
