@@ -20,20 +20,38 @@ def gtrans():
     session = requests.Session()
     session.headers = base_headers
     qry = urllib.parse.quote_plus(sys.argv[2])
-    url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={}&dt=t&q={}'.format(sys.argv[1], qry)
+    url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={}&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&q={}'.format(sys.argv[1], qry)
     try:
         resp = session.get(url, timeout=3).json()
         if resp[2] == "zh-CN":
             result = result + '^_^: Translate {} To {}\n'.format(resp[2], atl)
-            url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={}&dt=t&q={}'.format(atl, qry)
+            url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={}&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&q={}'.format(atl, qry)
             respen = session.get(url, timeout=3).json()
             for x in respen[0]:
-                result = result + x[0]
+                if not x[0] is None:
+                    result = result + x[0]
             result = result + '\n'
         else:
             result = result + '^_^: Translate {} To {}\n{}\n'.format(resp[2], sys.argv[1], sys.argv[2])
         for x in resp[0]:
-            result = result + x[0]
+            if not x[0] is None:
+                result = result + x[0]
+        if resp[2] == "zh-CN":
+            if not respen[1] is None:
+                result = result + '\n=========\n'
+                result = result + '0_0: Translations of {}\n'.format(sys.argv[2])
+                for x in respen[1]:
+                    result = result + '{}\n'.format(x[0][0])
+                    for i in x[2]:
+                        result = result + '{}: {}\n'.format(i[0], ", ".join(i[1]))
+        else:
+            if not resp[1] is None:
+                result = result + '\n=========\n'
+                result = result + '0_0: Translations of {}\n'.format(sys.argv[2])
+                for x in resp[1]:
+                    result = result + '{}\n'.format(x[0][0])
+                    for i in x[2]:
+                        result = result + '{}: {}\n'.format(i[0], ", ".join(i[1]))
         print(result.encode('gbk', 'ignore').decode('gbk'))
     except requests.exceptions.ReadTimeout as e:
         print('╰（‵□′）╯: ReadTimeout...')
