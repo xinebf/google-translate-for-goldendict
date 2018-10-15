@@ -32,6 +32,13 @@ def get_synonym(result, resp):
     return result
 
 
+def get_result(results, resp):
+    for x in resp[0]:
+        if x[0]:
+            results = results + x[0]
+    return results
+
+
 def get_translation():
     if len(sys.argv[2]) > 5000:
         print('(╯‵□′)╯︵┻━┻: Maximum characters exceeded...')
@@ -48,15 +55,11 @@ def get_translation():
             result = result + '^_^: Translate {} To {}\n'.format(resp[2], alternative_language)
             url = get_url(alternative_language, parse_query)
             resp_en = session.get(url, timeout=3).json()
-            for x in resp_en[0]:
-                if x[0]:
-                    result = result + x[0]
+            result = get_result(result, resp_en)
             result = result + '\n'
         else:
             result = result + '^_^: Translate {} To {}\n{}\n'.format(resp[2], sys.argv[1], sys.argv[2])
-        for x in resp[0]:
-            if x[0]:
-                result = result + x[0]
+        result = get_result(result, resp)
         if resp[2] == sys.argv[1]:
             result = get_synonym(result, resp_en)
         else:
