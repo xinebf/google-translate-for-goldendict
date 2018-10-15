@@ -22,7 +22,7 @@ def get_url(tl, qry):
 
 
 def get_synonym(result, resp):
-    if not resp[1] is None:
+    if resp[1]:
         result = result + '\n=========\n'
         result = result + '0_0: Translations of {}\n'.format(sys.argv[2])
         for x in resp[1]:
