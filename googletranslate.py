@@ -26,7 +26,7 @@ def get_synonym(result, resp):
         result = result + '\n=========\n'
         result = result + '0_0: Translations of {}\n'.format(sys.argv[2])
         for x in resp[1]:
-            result = result + '{}\n'.format(x[0][0])
+            result = result + '{}.\n'.format(x[0][0])
             for i in x[2]:
                 result = result + '{}: {}\n'.format(i[0], ", ".join(i[1]))
     return result
