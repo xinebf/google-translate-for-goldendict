@@ -16,8 +16,8 @@ import urllib.parse
 
 
 def get_url(tl, qry):
-    url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={}&' \
-          'dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&q={}'.format(tl, qry)
+    url = 'https://{}/translate_a/single?client=gtx&sl=auto&tl={}&dt=at&dt=bd&dt=ex&' \
+          'dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&q={}'.format(http_host, tl, qry)
     return url
 
 
@@ -70,6 +70,7 @@ def get_translation():
 
 
 if __name__ == "__main__":
+    http_host = 'translate.googleapis.com'
     result_code = 'gbk'
     alternative_language = 'en'
     get_translation()
