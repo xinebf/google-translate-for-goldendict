@@ -21,5 +21,9 @@ GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 
 图示: `H:\PathTo\google_translate.png`
 
+**Tips**
+
+默认设置不能使用的可以尝试将 `http_host` 设为: `translate.google.cn`.
+
 [1]: https://github.com/goldendict/goldendict
 [2]: https://translate.google.com/
