@@ -4,3 +4,4 @@
 *.iml
 out
 gen
+venv/
