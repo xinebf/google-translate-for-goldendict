@@ -3,7 +3,7 @@
 
 """
 Get translate from Google Translate
-author: 'ZHANGXINZENG'
+author: 'XINZENG ZHANG'
 Created on 2018-04-18 17:04:00
 USAGE:
 python3 googletranslate.py <target language code> <text to be translated>
@@ -39,6 +39,24 @@ def get_result(results, resp):
     return results
 
 
+def get_definitions(result, resp):
+    result = result + '\n=========\n'
+    result = result + '^_^: Definitions of {}\n'.format(sys.argv[2])
+    for x in resp[12]:
+        result = result + '{}.\n'.format(x[0])
+        for y in x[1]:
+            result = result + '  - {}\n    * {}\n'.format(y[0], y[2])
+    return result
+
+
+def get_examples(result, resp):
+    result = result + '\n=========\n'
+    result = result + '^_^: Examples of {}\n'.format(sys.argv[2])
+    for x in resp[13][0]:
+        result = result + '  - {}\n'.format(x[0].replace("<b>", "").replace("</b>", ""))
+    return result
+
+
 def get_translation():
     if len(sys.argv[2]) > 5000:
         print('(╯‵□′)╯︵┻━┻: Maximum characters exceeded...')
@@ -64,6 +82,10 @@ def get_translation():
             result = get_synonym(result, resp_en)
         else:
             result = get_synonym(result, resp)
+        if len(resp) >= 13:
+            result = get_definitions(result, resp)
+        if len(resp) >= 14:
+            result = get_examples(result, resp)
         print(result.encode(result_code, 'ignore').decode(result_code))
     except requests.exceptions.ReadTimeout:
         print('╰（‵□′）╯: ReadTimeout...')
