@@ -58,6 +58,17 @@ def get_examples(result, resp):
     return result
 
 
+def get_synonyms_en(result, resp):
+    result += '\n=========\n'
+    result += '^_^: Synonyms of {}\n'.format(query_string)
+    for i in resp[11]:
+        result += "{}.\n---\n".format(i[0])
+        for j in i[1]:
+            result += ", ".join(j[0]) + "\n"
+        result += "\n******\n"
+    return result
+
+
 def get_translation():
     if len(query_string) > 5000:
         print('(╯‵□′)╯︵┻━┻: Maximum characters exceeded...')
@@ -83,6 +94,8 @@ def get_translation():
             result = get_synonym(result, resp_en)
         else:
             result = get_synonym(result, resp)
+        if synonyms_en and len(resp) >= 12 and resp[11]:
+            result = get_synonyms_en(result, resp)
         if definitions_examples:
             if len(resp) >= 13 and resp[12]:
                 result = get_definitions(result, resp)
@@ -97,6 +110,7 @@ if __name__ == "__main__":
     http_host = 'translate.googleapis.com'
     target_language = sys.argv[1]
     query_string = sys.argv[2]
+    synonyms_en = False
     definitions_examples = True
     result_code = 'gbk'
     alternative_language = 'en'
