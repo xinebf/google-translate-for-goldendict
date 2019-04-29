@@ -41,7 +41,7 @@ def get_result(results, resp):
 
 def get_definitions(result, resp):
     result += '\n=========\n'
-    result += '^_^: Definitions of {}\n'.format(query_string)
+    result += '0_0: Definitions of {}\n'.format(query_string)
     for x in resp[12]:
         result += '{}.\n'.format(x[0])
         for y in x[1]:
@@ -52,7 +52,7 @@ def get_definitions(result, resp):
 
 def get_examples(result, resp):
     result += '\n=========\n'
-    result += '^_^: Examples of {}\n'.format(query_string)
+    result += '0_0: Examples of {}\n'.format(query_string)
     for x in resp[13][0]:
         result += '  - {}\n'.format(x[0].replace("<b>", "").replace("</b>", ""))
     return result
@@ -60,7 +60,7 @@ def get_examples(result, resp):
 
 def get_synonyms_en(result, resp):
     result += '\n=========\n'
-    result += '^_^: Synonyms of {}\n'.format(query_string)
+    result += '0_0: Synonyms of {}\n'.format(query_string)
     for i in resp[11]:
         result += "{}.\n---\n".format(i[0])
         for j in i[1]:
@@ -96,11 +96,10 @@ def get_translation():
             result = get_synonym(result, resp)
         if synonyms_en and len(resp) >= 12 and resp[11]:
             result = get_synonyms_en(result, resp)
-        if definitions_examples:
-            if len(resp) >= 13 and resp[12]:
-                result = get_definitions(result, resp)
-            if len(resp) >= 14 and resp[13]:
-                result = get_examples(result, resp)
+        if definitions_en and len(resp) >= 13 and resp[12]:
+            result = get_definitions(result, resp)
+        if examples_en and len(resp) >= 14 and resp[13]:
+            result = get_examples(result, resp)
         print(result.encode(result_code, 'ignore').decode(result_code))
     except requests.exceptions.ReadTimeout:
         print('╰（‵□′）╯: ReadTimeout...')
@@ -111,7 +110,8 @@ if __name__ == "__main__":
     target_language = sys.argv[1]
     query_string = sys.argv[2]
     synonyms_en = False
-    definitions_examples = True
+    definitions_en = True
+    examples_en = False
     result_code = 'gbk'
     alternative_language = 'en'
     get_translation()
