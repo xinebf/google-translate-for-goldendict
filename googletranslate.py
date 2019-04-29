@@ -23,37 +23,38 @@ def get_url(tl, qry):
 
 def get_synonym(result, resp):
     if resp[1]:
-        result = result + '\n=========\n'
-        result = result + '0_0: Translations of {}\n'.format(query_string)
+        result += '\n=========\n'
+        result += '0_0: Translations of {}\n'.format(query_string)
         for x in resp[1]:
-            result = result + '{}.\n'.format(x[0][0])
+            result += '{}.\n'.format(x[0][0])
             for i in x[2]:
-                result = result + '{}: {}\n'.format(i[0], ", ".join(i[1]))
+                result += '{}: {}\n'.format(i[0], ", ".join(i[1]))
     return result
 
 
 def get_result(results, resp):
     for x in resp[0]:
         if x[0]:
-            results = results + x[0]
+            results += x[0]
     return results
 
 
 def get_definitions(result, resp):
-    result = result + '\n=========\n'
-    result = result + '^_^: Definitions of {}\n'.format(query_string)
+    result += '\n=========\n'
+    result += '^_^: Definitions of {}\n'.format(query_string)
     for x in resp[12]:
-        result = result + '{}.\n'.format(x[0])
+        result += '{}.\n'.format(x[0])
         for y in x[1]:
-            result = result + '  - {}\n    * {}\n'.format(y[0], y[2])
+            result += '  - {}\n'.format(y[0])
+            result += '    * {}\n'.format(y[2]) if len(y) >= 3 else ''
     return result
 
 
 def get_examples(result, resp):
-    result = result + '\n=========\n'
-    result = result + '^_^: Examples of {}\n'.format(query_string)
+    result += '\n=========\n'
+    result += '^_^: Examples of {}\n'.format(query_string)
     for x in resp[13][0]:
-        result = result + '  - {}\n'.format(x[0].replace("<b>", "").replace("</b>", ""))
+        result += '  - {}\n'.format(x[0].replace("<b>", "").replace("</b>", ""))
     return result
 
 
@@ -70,13 +71,13 @@ def get_translation():
     try:
         resp = session.get(url, timeout=3).json()
         if resp[2] == target_language:
-            result = result + '^_^: Translate {} To {}\n'.format(resp[2], alternative_language)
+            result += '^_^: Translate {} To {}\n'.format(resp[2], alternative_language)
             url = get_url(alternative_language, parse_query)
             resp_en = session.get(url, timeout=3).json()
             result = get_result(result, resp_en)
-            result = result + '\n'
+            result += '\n'
         else:
-            result = result + '^_^: Translate {} To {}\n{}\n'.format(resp[2], target_language, query_string)
+            result += '^_^: Translate {} To {}\n{}\n'.format(resp[2], target_language, query_string)
         result = get_result(result, resp)
         if resp[2] == target_language:
             result = get_synonym(result, resp_en)
