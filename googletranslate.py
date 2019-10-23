@@ -42,7 +42,7 @@ def get_definitions(result, resp):
     result += '\n=========\n'
     result += '0_0: Definitions of {}\n'.format(query_string)
     for x in resp[12]:
-        result += '# {}.\n'.format(x[0])
+        result += '# {}.\n'.format(x[0]) if x[0] else ''
         for y in x[1]:
             result += '  - {}\n'.format(y[0])
             result += '    * {}\n'.format(y[2]) if len(y) >= 3 else ''
