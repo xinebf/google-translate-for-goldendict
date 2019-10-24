@@ -14,11 +14,6 @@ import requests
 import sys
 import urllib.parse
 
-proxies = {
-    "http": "http://127.0.0.1:1080",
-    "https": "http://127.0.0.1:1080"
-}
-
 
 def get_url(tl, qry):
     url = 'https://{}/translate_a/single?client=gtx&sl=auto&tl={}&dt=at&dt=bd&dt=ex&' \
@@ -74,10 +69,14 @@ def get_synonyms_en(result, resp):
 
 
 def get_resp(url_resp, proxy):
+    proxies = {
+        "http": "http://{}".format(proxy.strip()),
+        "https": "http://{}".format(proxy.strip())
+    }
     base_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0'}
     session = requests.Session()
     session.headers = base_headers
-    resp = session.get(url_resp, proxies=proxies if proxy else None, timeout=3).json()
+    resp = session.get(url_resp, proxies=proxies if proxy.strip() else None, timeout=3).json()
     return resp
 
 
@@ -116,7 +115,8 @@ def get_translation():
 
 if __name__ == "__main__":
     http_host = 'translate.googleapis.com'
-    http_proxy = False
+    # http_proxy = '127.0.0.1:1080'
+    http_proxy = ''
     target_language = sys.argv[1]
     query_string = sys.argv[2]
     synonyms_en = False
