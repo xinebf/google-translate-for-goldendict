@@ -73,22 +73,27 @@ def get_synonyms_en(result, resp):
     return result
 
 
+def get_resp(url_resp, proxy):
+    base_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0'}
+    session = requests.Session()
+    session.headers = base_headers
+    resp = session.get(url_resp, proxies=proxies if proxy else None, timeout=3).json()
+    return resp
+
+
 def get_translation():
     if len(query_string) > 5000:
         print('(╯‵□′)╯︵┻━┻: Maximum characters exceeded...')
         return
     result = ''
-    base_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0'}
-    session = requests.Session()
-    session.headers = base_headers
     parse_query = urllib.parse.quote_plus(query_string)
     url = get_url(target_language, parse_query)
     try:
-        resp = session.get(url, proxies=proxies if http_proxy else None, timeout=3).json()
+        resp = get_resp(url, http_proxy)
         if resp[2] == target_language:
             result += '^_^: Translate {} To {}\n'.format(resp[2], alternative_language)
             url = get_url(alternative_language, parse_query)
-            resp_en = session.get(url, proxies=proxies if http_proxy else None, timeout=3).json()
+            resp_en = get_resp(url, http_proxy)
             result = get_result(result, resp_en) + '\n'
             result = get_result(result, resp)
             result = get_synonym(result, resp_en)
