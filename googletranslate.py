@@ -109,6 +109,8 @@ def get_translation():
         print(result.encode(result_code, 'ignore').decode(result_code))
     except requests.exceptions.ReadTimeout:
         print('╰（‵□′）╯: ReadTimeout...')
+    except requests.exceptions.ProxyError:
+        print('(╯‵□′)╯︵┻━┻: ProxyError...')
     except:
         print('Errrrrrrrrror')
 
