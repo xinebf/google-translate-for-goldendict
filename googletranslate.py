@@ -13,6 +13,8 @@ python googletranslate.py zh-CN 'hello world!'
 import requests
 import sys
 import urllib.parse
+import asyncio
+from functools import partial
 
 
 def get_url(tl, qry):
@@ -80,22 +82,24 @@ def get_resp(url_resp, proxy):
     return resp
 
 
-def get_translation():
+async def get_translation():
     if len(query_string) > 5000:
         print('(╯‵□′)╯︵┻━┻: Maximum characters exceeded...')
         return
     result = ''
     parse_query = urllib.parse.quote_plus(query_string)
     url = get_url(target_language, parse_query)
+    url_alt = get_url(alternative_language, parse_query)
     try:
-        resp = get_resp(url, http_proxy)
+        magic = asyncio.get_running_loop()
+        resp = magic.run_in_executor(None, partial(get_resp, url, http_proxy))
+        resp_alt = magic.run_in_executor(None, partial(get_resp, url_alt, http_proxy))
+        [resp, resp_alt] = await asyncio.gather(resp, resp_alt)
         if resp[2] == target_language:
             result += '^_^: Translate {} To {}\n'.format(resp[2], alternative_language)
-            url = get_url(alternative_language, parse_query)
-            resp_en = get_resp(url, http_proxy)
-            result = get_result(result, resp_en) + '\n'
+            result = get_result(result, resp_alt) + '\n'
             result = get_result(result, resp)
-            result = get_synonym(result, resp_en)
+            result = get_synonym(result, resp_alt)
         else:
             result += '^_^: Translate {} To {}\n{}\n'.format(resp[2], target_language, query_string)
             result = get_result(result, resp)
@@ -125,4 +129,6 @@ if __name__ == "__main__":
     examples_en = False
     result_code = 'gbk'
     alternative_language = 'en'
-    get_translation()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(get_translation())
+    loop.close()
