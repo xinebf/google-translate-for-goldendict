@@ -91,9 +91,9 @@ async def get_translation():
     url = get_url(target_language, parse_query)
     url_alt = get_url(alternative_language, parse_query)
     try:
-        magic = asyncio.get_running_loop()
-        resp = magic.run_in_executor(None, partial(get_resp, url, http_proxy))
-        resp_alt = magic.run_in_executor(None, partial(get_resp, url_alt, http_proxy))
+        loop = asyncio.get_running_loop()
+        resp = loop.run_in_executor(None, partial(get_resp, url, http_proxy))
+        resp_alt = loop.run_in_executor(None, partial(get_resp, url_alt, http_proxy))
         [resp, resp_alt] = await asyncio.gather(resp, resp_alt)
         if resp[2] == target_language:
             result += '^_^: Translate {} To {}\n'.format(resp[2], alternative_language)
@@ -129,6 +129,4 @@ if __name__ == "__main__":
     examples_en = False
     result_code = 'gbk'
     alternative_language = 'en'
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(get_translation())
-    loop.close()
+    asyncio.run(get_translation())
