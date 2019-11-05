@@ -7,7 +7,7 @@ Add Google translate for GoldenDict
 
 **使用方法:**
 
-需要 python3.5+ 并安装 requests:
+需要 python3.7+ 并安装 requests:
 
 `pip3 install requests`
 
