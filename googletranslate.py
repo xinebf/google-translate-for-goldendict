@@ -88,8 +88,7 @@ class GoogleTranslate(object):
 
     async def get_translation(self):
         if len(self.query_string) > 5000:
-            print('(╯‵□′)╯︵┻━┻: Maximum characters exceeded...')
-            return
+            return '(╯‵□′)╯︵┻━┻: Maximum characters exceeded...'
         parse_query = urllib.parse.quote_plus(self.query_string)
         url = self.get_url(self.target_language, parse_query)
         url_alt = self.get_url(self.alternative_language, parse_query)
@@ -113,15 +112,15 @@ class GoogleTranslate(object):
                 self.get_definitions(resp)
             if self.examples_en and len(resp) >= 14 and resp[13]:
                 self.get_examples(resp)
-            print(self.result.encode(self.result_code, 'ignore').decode(self.result_code))
+            return self.result.encode(self.result_code, 'ignore').decode(self.result_code)
         except requests.exceptions.ReadTimeout:
-            print('╰（‵□′）╯: ReadTimeout...')
+            return '╰（‵□′）╯: ReadTimeout...'
         except requests.exceptions.ProxyError:
-            print('(╯‵□′)╯︵┻━┻: ProxyError...')
+            return '(╯‵□′)╯︵┻━┻: ProxyError...'
         except:
-            print('Errrrrrrrrror')
+            return 'Errrrrrrrrror'
 
 
 if __name__ == '__main__':
     gtrans = GoogleTranslate()
-    asyncio.run(gtrans.get_translation())
+    print(asyncio.run(gtrans.get_translation()))
