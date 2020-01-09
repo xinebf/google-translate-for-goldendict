@@ -57,7 +57,7 @@ class GoogleTranslate(object):
             self.result += f'# {x[0] if x[0] else ""}.\n'
             for y in x[1]:
                 self.result += f'  - {y[0]}\n'
-                self.result += f'    * {y[2]}\n' if len(y) >= 3 else ""
+                self.result += f'    * {y[2]}\n' if len(y) >= 3 else ''
 
     def get_examples(self, resp):
         self.result += '\n=========\n'
@@ -69,7 +69,6 @@ class GoogleTranslate(object):
         self.result += '\n=========\n'
         self.result += f'0_0: Synonyms of {self.query_string}\n'
         for idx, x in enumerate(resp[11]):
-            print(idx)
             self.result += '\n******\n' if idx else ''
             self.result += f'{x[0]}.\n---\n'
             for y in x[1]:
