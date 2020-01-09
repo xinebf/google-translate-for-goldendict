@@ -18,18 +18,17 @@ from functools import partial
 
 
 class GoogleTranslate(object):
-    def __init__(self, http_host='translate.googleapis.com', http_proxy='', target_language=sys.argv[1],
-                 query_string=sys.argv[2], synonyms_en=False, definitions_en=True, examples_en=False, result_code='gbk',
-                 alternative_language='en'):
+    def __init__(self, http_host='translate.googleapis.com', http_proxy='', synonyms_en=False, definitions_en=True,
+                 examples_en=False, result_code='gbk', alternative_language='en'):
         self.http_host = http_host
         self.http_proxy = http_proxy
-        self.target_language = target_language
-        self.query_string = query_string
         self.synonyms_en = synonyms_en
         self.definitions_en = definitions_en
         self.examples_en = examples_en
         self.result_code = result_code
         self.alternative_language = alternative_language
+        self.target_language = ''
+        self.query_string = ''
         self.result = ''
 
     def get_url(self, tl, qry):
@@ -69,11 +68,12 @@ class GoogleTranslate(object):
     def get_synonyms_en(self, resp):
         self.result += '\n=========\n'
         self.result += f'0_0: Synonyms of {self.query_string}\n'
-        for x in resp[11]:
+        for idx, x in enumerate(resp[11]):
+            print(idx)
+            self.result += '\n******\n' if idx else ''
             self.result += f'{x[0]}.\n---\n'
             for y in x[1]:
                 self.result += ', '.join(y[0]) + '\n'
-            self.result += '\n******\n'
 
     def get_resp(self, url):
         proxies = {
@@ -86,7 +86,10 @@ class GoogleTranslate(object):
         resp = session.get(url, proxies=proxies if self.http_proxy.strip() else None, timeout=5).json()
         return resp
 
-    async def get_translation(self):
+    async def get_translation(self, target_language, query_string):
+        self.result = ''
+        self.target_language = target_language
+        self.query_string = query_string
         if len(self.query_string) > 5000:
             return '(╯‵□′)╯︵┻━┻: Maximum characters exceeded...'
         parse_query = urllib.parse.quote_plus(self.query_string)
@@ -123,4 +126,4 @@ class GoogleTranslate(object):
 
 if __name__ == '__main__':
     gtrans = GoogleTranslate()
-    print(asyncio.run(gtrans.get_translation()))
+    print(asyncio.run(gtrans.get_translation(target_language=sys.argv[1], query_string=sys.argv[2])))
