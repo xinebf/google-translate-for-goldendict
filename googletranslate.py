@@ -101,8 +101,8 @@ class GoogleTranslate(object):
             [resp, resp_alt] = await asyncio.gather(resp, resp_alt)
             if resp[2] == self.target_language:
                 self.result += f'^_^: Translate {resp[2]} To {self.alternative_language}\n'
-                self.get_result(resp_alt)
                 self.get_result(resp)
+                self.get_result(resp_alt)
                 self.get_synonym(resp_alt)
             else:
                 self.result += f'^_^: Translate {resp[2]} To {self.target_language}\n{self.query_string}\n'
