@@ -15,11 +15,12 @@ import sys
 import urllib.parse
 import asyncio
 from functools import partial
+import re
 
 
 class GoogleTranslate(object):
     def __init__(self, http_host='translate.googleapis.com', http_proxy='', synonyms_en=False, definitions_en=True,
-                 examples_en=False, result_code='gbk', alternative_language='en'):
+                 examples_en=False, result_code=sys.stdout.encoding, alternative_language='en', result_type='plain'):
         self.http_host = http_host
         self.http_proxy = http_proxy
         self.synonyms_en = synonyms_en
@@ -27,6 +28,7 @@ class GoogleTranslate(object):
         self.examples_en = examples_en
         self.result_code = result_code
         self.alternative_language = alternative_language
+        self.result_type = result_type
         self.target_language = ''
         self.query_string = ''
         self.result = ''
@@ -63,14 +65,13 @@ class GoogleTranslate(object):
         self.result += '\n=========\n'
         self.result += f'0_0: Examples of {self.query_string}\n'
         for x in resp[13][0]:
-            self.result += f'  - {x[0].replace("<b>", "").replace("</b>", "")}\n'
+            self.result += f'  * {x[0]}\n'
 
     def get_synonyms_en(self, resp):
         self.result += '\n=========\n'
         self.result += f'0_0: Synonyms of {self.query_string}\n'
         for idx, x in enumerate(resp[11]):
-            self.result += '\n******\n' if idx else ''
-            self.result += f'{x[0]}.\n---\n'
+            self.result += f'# {x[0]}.\n'
             for y in x[1]:
                 self.result += ', '.join(y[0]) + '\n'
 
@@ -84,6 +85,13 @@ class GoogleTranslate(object):
         session.headers = base_headers
         resp = session.get(url, proxies=proxies if self.http_proxy.strip() else None, timeout=5).json()
         return resp
+
+    def result_to_html(self):
+        self.result_code = 'utf-8'
+        sys.stdout.reconfigure(encoding=self.result_code)
+        self.result = re.sub(r'(#.*)', r'<font color="#0000FF"><b>\1</b></font>', self.result)
+        self.result = re.sub(r'([*].*)', r'<font color="#008080">\1</font>', self.result)
+        self.result = self.result.replace('\n', '<br />')
 
     async def get_translation(self, target_language, query_string):
         self.result = ''
@@ -101,8 +109,8 @@ class GoogleTranslate(object):
             [resp, resp_alt] = await asyncio.gather(resp, resp_alt)
             if resp[2] == self.target_language:
                 self.result += f'^_^: Translate {resp[2]} To {self.alternative_language}\n'
-                self.get_result(resp_alt)
                 self.get_result(resp)
+                self.get_result(resp_alt)
                 self.get_synonym(resp_alt)
             else:
                 self.result += f'^_^: Translate {resp[2]} To {self.target_language}\n{self.query_string}\n'
@@ -114,6 +122,10 @@ class GoogleTranslate(object):
                 self.get_definitions(resp)
             if self.examples_en and len(resp) >= 14 and resp[13]:
                 self.get_examples(resp)
+            if self.result_type == 'html':
+                self.result_to_html()
+            else:
+                self.result = self.result.replace("<b>", "").replace("</b>", "")
             return self.result.encode(self.result_code, 'ignore').decode(self.result_code)
         except requests.exceptions.ReadTimeout:
             return '╰（‵□′）╯: ReadTimeout...'
@@ -124,5 +136,5 @@ class GoogleTranslate(object):
 
 
 if __name__ == '__main__':
-    gtrans = GoogleTranslate()
+    gtrans = GoogleTranslate(result_type='plain')
     print(asyncio.run(gtrans.get_translation(target_language=sys.argv[1], query_string=sys.argv[2])))

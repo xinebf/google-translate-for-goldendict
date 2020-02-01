@@ -25,5 +25,7 @@ GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 
 默认设置不能使用的可以尝试将 `http_host` 设为: `translate.google.cn`.
 
+类型可以设为 `Html`, 并同时将 `result_type` 设为: `html`.
+
 [1]: https://github.com/goldendict/goldendict
 [2]: https://translate.google.com/
