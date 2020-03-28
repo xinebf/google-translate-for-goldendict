@@ -7,13 +7,13 @@ Add Google translate for GoldenDict
 
 **使用方法:**
 
-需要 python3.7+ 并安装 requests:
+需要 python 3.7+ 并安装 requests:
 
 `pip3 install requests`
 
 GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 
-类型: `纯文字`
+类型: `Html`
 
 名称: `Google Translate`
 
@@ -24,6 +24,10 @@ GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 **Tips**
 
 默认设置不能使用的可以尝试将 `http_host` 设为: `translate.google.cn`.
+
+类型可以设为 `Html` 或 `纯文本`.
+
+其中: `Html` 对应 `result_type='html'`. `纯文本` 对应 `result_type='plain'`
 
 [1]: https://github.com/goldendict/goldendict
 [2]: https://translate.google.com/
