@@ -26,7 +26,8 @@ class GoogleTranslate(object):
         self.synonyms_en = synonyms_en
         self.definitions_en = definitions_en
         self.examples_en = examples_en
-        self.result_code = result_code
+        self.result_code = 'utf-8' if result_type == 'html' else result_code
+        sys.stdout.reconfigure(encoding=self.result_code) if result_type == 'html' else None
         self.alternative_language = alternative_language
         self.result_type = result_type
         self.target_language = ''
@@ -87,8 +88,6 @@ class GoogleTranslate(object):
         return resp
 
     def result_to_html(self):
-        self.result_code = 'utf-8'
-        sys.stdout.reconfigure(encoding=self.result_code)
         css_text = """\
         <style type="text/css">
         p {white-space: pre-wrap;}
@@ -101,7 +100,7 @@ class GoogleTranslate(object):
         self.result = re.sub(r'(0_0:.*?of)(.*)', r'<gray>\1</gray>\2', self.result)
         match = re.compile(rf"({re.escape('^_^')}: Translate)(.*)(To)(.*)")
         self.result = match.sub(r'<gray>\1</gray>\2<gray>\3</gray>\4', self.result)
-        self.result = f'<html>\n<head>\n{css_text}\n</head>\n<body>\n<p>{self.result}</p>\n</body>\n<html>'
+        self.result = f'<html>\n<head>\n{css_text}\n</head>\n<body>\n<p>{self.result}</p>\n</body>\n</html>'
 
     async def get_translation(self, target_language, query_string):
         self.result = ''
