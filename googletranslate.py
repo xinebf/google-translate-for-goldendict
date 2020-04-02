@@ -16,6 +16,7 @@ import urllib.parse
 import asyncio
 from functools import partial
 import re
+from googletranslatetk import Token
 
 
 class GoogleTranslate(object):
@@ -34,9 +35,9 @@ class GoogleTranslate(object):
         self.query_string = ''
         self.result = ''
 
-    def get_url(self, tl, qry):
+    def get_url(self, tl, qry, tk):
         url = f'https://{self.http_host}/translate_a/single?client=gtx&sl=auto&tl={tl}&dt=at&dt=bd&dt=ex&' \
-              f'dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&q={qry}'
+              f'dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&tk={tk}&q={qry}'
         return url
 
     def get_synonym(self, resp):
@@ -102,15 +103,16 @@ class GoogleTranslate(object):
         self.result = match.sub(r'<gray>\1</gray>\2<gray>\3</gray>\4', self.result)
         self.result = f'<html>\n<head>\n{css_text}\n</head>\n<body>\n<p>{self.result}</p>\n</body>\n</html>'
 
-    async def get_translation(self, target_language, query_string):
+    async def get_translation(self, target_language, query_string, tkk=None):
         self.result = ''
         self.target_language = target_language
         self.query_string = query_string
+        tk = Token(tkk).calculate_token(self.query_string)
         if len(self.query_string) > 5000:
             return '(╯‵□′)╯︵┻━┻: Maximum characters exceeded...'
         parse_query = urllib.parse.quote_plus(self.query_string)
-        url = self.get_url(self.target_language, parse_query)
-        url_alt = self.get_url(self.alternative_language, parse_query)
+        url = self.get_url(self.target_language, parse_query, tk)
+        url_alt = self.get_url(self.alternative_language, parse_query, tk)
         try:
             loop = asyncio.get_running_loop()
             resp = loop.run_in_executor(None, partial(self.get_resp, url))
@@ -146,4 +148,4 @@ class GoogleTranslate(object):
 
 if __name__ == '__main__':
     gtrans = GoogleTranslate(result_type='html')
-    print(asyncio.run(gtrans.get_translation(target_language=sys.argv[1], query_string=sys.argv[2])))
+    print(asyncio.run(gtrans.get_translation(target_language=sys.argv[1], query_string=sys.argv[2], tkk=None)))
