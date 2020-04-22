@@ -20,7 +20,7 @@ from googletranslatetk import Token
 
 
 class GoogleTranslate(object):
-    def __init__(self, http_host='translate.googleapis.com', http_proxy='', synonyms_en=False, definitions_en=True,
+    def __init__(self, http_host='translate.google.com', http_proxy='', synonyms_en=False, definitions_en=True,
                  examples_en=False, result_code=sys.stdout.encoding, alternative_language='en', result_type='plain'):
         self.http_host = http_host
         self.http_proxy = http_proxy
@@ -36,8 +36,8 @@ class GoogleTranslate(object):
         self.result = ''
 
     def get_url(self, tl, qry, tk):
-        url = f'https://{self.http_host}/translate_a/single?client=gtx&sl=auto&tl={tl}&dt=at&dt=bd&dt=ex&' \
-              f'dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&tk={tk}&q={qry}'
+        url = f'https://{self.http_host}/translate_a/single?client=webapp&sl=auto&tl={tl}&hl=en&dt=at&dt=bd&dt=ex&' \
+              f'dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=sos&dt=ss&dt=t&ssel=0&tsel=0&kc=1&tk={tk}&q={qry}'
         return url
 
     def get_synonym(self, resp):
