@@ -13,7 +13,7 @@ Add Google translate for GoldenDict
 
 GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 
-类型: `纯文字`
+类型: `html`
 
 名称: `Google Translate`
 
