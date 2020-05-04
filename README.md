@@ -7,9 +7,9 @@ Add Google translate for GoldenDict
 
 **使用方法:**
 
-需要 python 3.7+ 并安装 requests:
+需要 python 3.7+:
 
-`pip3 install requests`
+`pip3 install google-translate-for-goldendict`
 
 GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 
@@ -17,7 +17,7 @@ GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 
 名称: `Google Translate`
 
-命令行: `python H:\PathTo\googletranslate.py zh-CN %GDWORD%`
+命令行: `python -m googletranslate.googletranslate zh-CN %GDWORD%`
 
 图示: `H:\PathTo\google_translate.png`
 
@@ -26,7 +26,7 @@ GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 默认设置不能使用的可以尝试将 `http_host` 设为: `translate.google.cn`.
 
 ```
-python H:\PathTo\googletranslate.py zh-CN %GDWORD% -s "translate.google.cn"
+python -m googletranslate.googletranslate zh-CN %GDWORD% -s "translate.google.cn"
 ```
 
 类型可以设为 `Html` 或 `纯文本`.

@@ -10,7 +10,7 @@ import threading as td
 from queue import Queue
 from dataclasses import dataclass
 
-from googletranslate import main as trans
+from googletranslate.googletranslate import main as trans
 
 
 @dataclass()

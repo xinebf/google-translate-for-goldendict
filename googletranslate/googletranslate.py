@@ -17,7 +17,7 @@ import asyncio
 from functools import partial
 import re
 import argparse
-from googletranslatetk import Token
+from .googletranslatetk import Token
 
 
 class GoogleTranslate(object):
