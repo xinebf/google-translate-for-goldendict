@@ -10,7 +10,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="google-translate-for-goldendict",
-    version="1.3.1",
+    version="1.3.2",
     author="xinebf",
     author_email="me@xinebf.com",
     description="Add Google translate to GoldenDict",
