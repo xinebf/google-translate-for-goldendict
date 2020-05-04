@@ -44,10 +44,10 @@ optional arguments:
   -p PROXY        proxy server (eg: 127.0.0.1:1080)
   -a ALTERNATIVE  alternative language (default: en)
   -r TYPE         result type (default: html)
-  -m SYNONYMS     synonyms (default: False)
-  -d DEFINITIONS  definitions (default: True)
-  -e EXAMPLES     examples (default: False)
   -k TKK          tkk
+  -m              show synonyms
+  -d              show definitions
+  -e              show examples
 ```
 
 [1]: https://github.com/goldendict/goldendict
