@@ -155,10 +155,10 @@ def get_args():
     parser.add_argument('-p', dest='proxy', type=str, default='', help='proxy server (eg: 127.0.0.1:1080)')
     parser.add_argument('-a', dest='alternative', type=str, default='en', help='alternative language (default: en)')
     parser.add_argument('-r', dest='type', type=str, default='html', help='result type (default: html)')
-    parser.add_argument('-m', dest='synonyms', type=bool, default=False, help='synonyms (default: False)')
-    parser.add_argument('-d', dest='definitions', type=bool, default=True, help='definitions (default: True)')
-    parser.add_argument('-e', dest='examples', type=bool, default=False, help='examples (default: False)')
     parser.add_argument('-k', dest='tkk', type=str, default='', help='tkk')
+    parser.add_argument('-m', dest='synonyms', action='store_true', help='show synonyms')
+    parser.add_argument('-d', dest='definitions', action='store_true', help='show definitions')
+    parser.add_argument('-e', dest='examples', action='store_true', help='show examples')
     return parser.parse_args()
 
 
