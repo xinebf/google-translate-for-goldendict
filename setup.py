@@ -5,12 +5,12 @@
 
 import setuptools
 
-with open("README.md", "r", encoding='utf-8') as fh:
+with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="google-translate-for-goldendict",
-    version="1.3.0",
+    version="1.3.1",
     author="xinebf",
     author_email="me@xinebf.com",
     description="Add Google translate to GoldenDict",

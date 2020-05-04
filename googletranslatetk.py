@@ -14,14 +14,14 @@ class Token:
         self.tkk = tkk
 
     def calculate_token(self, text):
-        if self.tkk is None:
+        if self.tkk == "":
             """
             422392.71207223
             406644.3293161072
             431767.4042228602
             440498.1287591069
             """
-            self.tkk = '440498.1287591069'
+            self.tkk = "440498.1287591069"
         [first_seed, second_seed] = self.tkk.split(".")
 
         try:

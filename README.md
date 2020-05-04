@@ -25,9 +25,30 @@ GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 
 默认设置不能使用的可以尝试将 `http_host` 设为: `translate.google.cn`.
 
+```
+python H:\PathTo\googletranslate.py zh-CN %GDWORD% -s "translate.google.cn"
+```
+
 类型可以设为 `Html` 或 `纯文本`.
 
-其中: `Html` 对应 `result_type='html'`. `纯文本` 对应 `result_type='plain'`
+其中: `Html` 对应 `-r "html"`. `纯文本` 对应 `-r "plain"`
+
+```
+positional arguments:
+  target          target language (eg: zh-CN)
+  query           query string
+
+optional arguments:
+  -h, --help      show this help message and exit
+  -s HOST         host name (default: translate.google.com)
+  -p PROXY        proxy server (eg: 127.0.0.1:1080)
+  -a ALTERNATIVE  alternative language (default: en)
+  -r TYPE         result type (default: html)
+  -m SYNONYMS     synonyms (default: False)
+  -d DEFINITIONS  definitions (default: True)
+  -e EXAMPLES     examples (default: False)
+  -k TKK          tkk
+```
 
 [1]: https://github.com/goldendict/goldendict
 [2]: https://translate.google.com/

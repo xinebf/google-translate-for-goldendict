@@ -3,19 +3,32 @@
 # Author: ZHANG XINZENG
 # Created on 2020-01-09 20:31
 
-import asyncio
 import tkinter as tk
 from tkinter import ttk
 from tkinter import scrolledtext
 import threading as td
 from queue import Queue
+from dataclasses import dataclass
 
-from googletranslate import GoogleTranslate
+from googletranslate import main as trans
 
 
-class UITranslate(GoogleTranslate):
+@dataclass()
+class Args:
+    target: str = 'zh-CN'
+    query: str = ''
+    host: str = 'translate.google.com'
+    proxy: str = ''
+    alternative: str = 'en'
+    type: str = 'plain'
+    synonyms: bool = False
+    definitions: bool = True
+    examples: bool = False
+    tkk: str = ''
+
+
+class UITranslate:
     def __init__(self, window):
-        super().__init__(result_code='utf-8', synonyms_en=True, definitions_en=True, examples_en=True)
         self.window = window
         self.window.title('Google Translate')
 
@@ -59,9 +72,10 @@ class UITranslate(GoogleTranslate):
                 self.window.clipboard_clear()
             except Exception as e:
                 query_string = str(e)
-        asyncio.run(self.get_translation(target_language='zh-CN', query_string=query_string))
+        Args.query = query_string
+        trans_result = trans(Args)
         self.st.delete('1.0', tk.END)
-        self.st.insert(tk.END, self.result)
+        self.st.insert(tk.END, trans_result)
         self.run_queue.get()
         gui_style.configure('Ui.TButton', foreground='#000000')
 

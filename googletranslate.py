@@ -16,21 +16,21 @@ import urllib.parse
 import asyncio
 from functools import partial
 import re
+import argparse
 from googletranslatetk import Token
 
 
 class GoogleTranslate(object):
-    def __init__(self, http_host='translate.google.com', http_proxy='', synonyms_en=False, definitions_en=True,
-                 examples_en=False, result_code=sys.stdout.encoding, alternative_language='en', result_type='plain'):
-        self.http_host = http_host
-        self.http_proxy = http_proxy
-        self.synonyms_en = synonyms_en
-        self.definitions_en = definitions_en
-        self.examples_en = examples_en
-        self.result_code = 'utf-8' if result_type == 'html' else result_code
-        sys.stdout.reconfigure(encoding=self.result_code) if result_type == 'html' else None
-        self.alternative_language = alternative_language
-        self.result_type = result_type
+    def __init__(self, args):
+        self.http_host = args.host
+        self.http_proxy = args.proxy
+        self.synonyms_en = args.synonyms
+        self.definitions_en = args.definitions
+        self.examples_en = args.examples
+        self.result_code = 'utf-8' if args.type == 'html' else sys.stdout.encoding
+        sys.stdout.reconfigure(encoding=self.result_code) if args.type == 'html' else None
+        self.alternative_language = args.alternative
+        self.result_type = args.type
         self.target_language = ''
         self.query_string = ''
         self.result = ''
@@ -103,7 +103,7 @@ class GoogleTranslate(object):
         self.result = match.sub(r'<gray>\1</gray>\2<gray>\3</gray>\4', self.result)
         self.result = f'<html>\n<head>\n{css_text}\n</head>\n<body>\n<p>{self.result}</p>\n</body>\n</html>'
 
-    async def get_translation(self, target_language, query_string, tkk=None):
+    async def get_translation(self, target_language, query_string, tkk=''):
         self.result = ''
         self.target_language = target_language
         self.query_string = query_string
@@ -136,16 +136,38 @@ class GoogleTranslate(object):
             if self.result_type == 'html':
                 self.result_to_html()
             else:
-                self.result = self.result.replace("<b>", "").replace("</b>", "")
+                self.result = self.result.replace('<b>', '').replace('</b>', '')
             return self.result.encode(self.result_code, 'ignore').decode(self.result_code)
         except requests.exceptions.ReadTimeout:
             return '╰（‵□′）╯: ReadTimeout...'
         except requests.exceptions.ProxyError:
             return '(╯‵□′)╯︵┻━┻: ProxyError...'
         except Exception as e:
-            return f'Errrrrrrrrror {e}'
+            return f'Errrrrrrrrror: {e}'
+
+
+def get_args():
+    h = 'translate.google.com'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('target', type=str, default='en', help='target language (eg: zh-CN)')
+    parser.add_argument('query', type=str, default='', help='query string')
+    parser.add_argument('-s', dest='host', type=str, default='translate.google.com', help=f'host name (default: {h})')
+    parser.add_argument('-p', dest='proxy', type=str, default='', help='proxy server (eg: 127.0.0.1:1080)')
+    parser.add_argument('-a', dest='alternative', type=str, default='en', help='alternative language (default: en)')
+    parser.add_argument('-r', dest='type', type=str, default='html', help='result type (default: html)')
+    parser.add_argument('-m', dest='synonyms', type=bool, default=False, help='synonyms (default: False)')
+    parser.add_argument('-d', dest='definitions', type=bool, default=True, help='definitions (default: True)')
+    parser.add_argument('-e', dest='examples', type=bool, default=False, help='examples (default: False)')
+    parser.add_argument('-k', dest='tkk', type=str, default='', help='tkk')
+    return parser.parse_args()
+
+
+def main(args=None):
+    args = args if args else get_args()
+    g_trans = GoogleTranslate(args)
+    trans = asyncio.run(g_trans.get_translation(args.target, args.query, tkk=args.tkk))
+    return trans
 
 
 if __name__ == '__main__':
-    gtrans = GoogleTranslate(result_type='html')
-    print(asyncio.run(gtrans.get_translation(target_language=sys.argv[1], query_string=sys.argv[2], tkk=None)))
+    print(main())
