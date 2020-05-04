@@ -10,7 +10,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="google-translate-for-goldendict",
-    version="1.3.2",
+    version="1.3.3",
     author="xinebf",
     author_email="me@xinebf.com",
     description="Add Google translate to GoldenDict",
@@ -21,7 +21,7 @@ setuptools.setup(
     install_requires=['requests'],
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GPL-3.0 License",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.7',
