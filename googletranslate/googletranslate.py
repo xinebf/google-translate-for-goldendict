@@ -106,6 +106,8 @@ class GoogleTranslate(object):
     async def get_translation(self, target_language, query_string, tkk=''):
         self.result = ''
         self.target_language = target_language
+        query_string = ''.join(query_string.split('-%0A'))
+        query_string = ' '.join(query_string.split('%0A'))
         self.query_string = query_string
         tk = Token(tkk).calculate_token(self.query_string)
         if len(self.query_string) > 5000:
