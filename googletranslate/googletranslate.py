@@ -147,14 +147,14 @@ class GoogleTranslate(object):
 
 
 def get_args():
-    h = 'translate.google.com'
+    default = '(default: %(default)s)'
     parser = argparse.ArgumentParser()
-    parser.add_argument('target', type=str, default='en', help='target language (eg: zh-CN)')
+    parser.add_argument('target', type=str, default='en', help=f'target language, eg: zh-CN, {default}')
     parser.add_argument('query', type=str, default='', help='query string')
-    parser.add_argument('-s', dest='host', type=str, default='translate.google.com', help=f'host name (default: {h})')
+    parser.add_argument('-s', dest='host', type=str, default='translate.google.com', help=f'host name {default}')
     parser.add_argument('-p', dest='proxy', type=str, default='', help='proxy server (eg: 127.0.0.1:1080)')
-    parser.add_argument('-a', dest='alternative', type=str, default='en', help='alternative language (default: en)')
-    parser.add_argument('-r', dest='type', type=str, default='html', help='result type (default: html)')
+    parser.add_argument('-a', dest='alternative', type=str, default='en', help=f'alternative language {default}')
+    parser.add_argument('-r', dest='type', type=str, default='html', help=f'result type {default}')
     parser.add_argument('-k', dest='tkk', type=str, default='', help='tkk')
     parser.add_argument('-m', dest='synonyms', action='store_true', help='show synonyms')
     parser.add_argument('-d', dest='definitions', action='store_true', help='show definitions')
