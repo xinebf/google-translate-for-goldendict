@@ -17,7 +17,7 @@ GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 
 名称: `Google Translate`
 
-命令行: `python -m googletranslate.googletranslate zh-CN %GDWORD%`
+命令行: `python -m googletranslate zh-CN %GDWORD%`
 
 图示: `H:\PathTo\google_translate.png`
 
@@ -26,7 +26,7 @@ GoldenDict - 编辑 - 字典 - 字典来源 - 程式
 默认设置不能使用的可以尝试将 `http_host` 设为: `translate.google.cn`.
 
 ```
-python -m googletranslate.googletranslate zh-CN %GDWORD% -s "translate.google.cn"
+python -m googletranslate zh-CN %GDWORD% -s "translate.google.cn"
 ```
 
 类型可以设为 `Html` 或 `纯文本`.
