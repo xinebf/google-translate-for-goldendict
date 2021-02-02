@@ -34,6 +34,7 @@ class GoogleTranslate(object):
         self.target_language = ''
         self.query_string = ''
         self.result = ''
+        self.show_plain_linebreak = args.show_plain_linebreak
 
     def get_url(self, tl, qry, tk):
         url = f'https://{self.http_host}/translate_a/single?client=webapp&sl=auto&tl={tl}&hl=en&dt=at&dt=bd&dt=ex&' \
@@ -106,6 +107,9 @@ class GoogleTranslate(object):
     async def get_translation(self, target_language, query_string, tkk=''):
         self.result = ''
         self.target_language = target_language
+        if not self.show_plain_linebreak:
+            query_string = ''.join(query_string.split('-%0A'))
+            query_string = ' '.join(query_string.split('%0A'))
         self.query_string = query_string
         tk = Token(tkk).calculate_token(self.query_string)
         if len(self.query_string) > 5000:
@@ -159,6 +163,7 @@ def get_args():
     parser.add_argument('-m', dest='synonyms', action='store_true', help='show synonyms')
     parser.add_argument('-d', dest='definitions', action='store_true', help='show definitions')
     parser.add_argument('-e', dest='examples', action='store_true', help='show examples')
+    parser.add_argument('--show-plain-linebreak', dest='show_plain_linebreak', action='store_true', help='show plain line break character (e.g. %0A)')
     return parser.parse_args()
 
 
